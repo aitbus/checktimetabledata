@@ -11,12 +11,22 @@ class Tasks::Maintask
   end
 
   def self.init
-  	DbManager.init
+  	# urlHashData = UrlHashData.new()
+  	# urlHashData.url='jjjblog.ppen.info'
+  	# urlHashData.hash='ssssss'
+  	# urlHashData.updateTime= Time.now.strftime("%Y-%m-%d %X:%M:%S")
+  	# UrlHashDbManager.insert(urlHashData)
+
+
+  	# urlHashData2 = UrlHashDbManager.selectWhereUrl('jjjblog.ppen.info')
+  	# puts urlHashData2.hash
+
   end
 
 
   #時刻表のリンク集の更新
   def self.updateLinks
+  	CheckHttpDataManager.check()
 
   end
 
