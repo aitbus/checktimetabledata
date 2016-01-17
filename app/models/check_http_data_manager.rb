@@ -37,23 +37,23 @@ class CheckHttpDataManager
 
 
   	def self.checkMainUrl()
-  		#urlHashData = UrlHashDbManager.selectWhereUrl('http://www.ait.ac.jp/access/yakusa/')
-  		urlHashData = UrlHashDbManager.selectWhereUrl('https://blog.ppen.info/')
+  		urlHashData = UrlHashDbManager.selectWhereUrl('http://www.ait.ac.jp/access/yakusa/')
+  		#urlHashData = UrlHashDbManager.selectWhereUrl('https://blog.ppen.info/')
   		self.updateUrlData(urlHashData)
 
   	end
 
   	def self.checkTimeScheduleUrl()
-  		#urlHashData = UrlHashDbManager.selectWhereUrl('http://www.ait.ac.jp/assets/docs/access_yakusa01.pdf')
-  		urlHashData = UrlHashDbManager.selectWhereUrl('https://blog.ppen.info/wp/?p=298')
+  		urlHashData = UrlHashDbManager.selectWhereUrl('http://www.ait.ac.jp/assets/docs/access_yakusa01.pdf')
+  		#urlHashData = UrlHashDbManager.selectWhereUrl('https://blog.ppen.info/wp/?p=298')
   		  	
   		self.updateUrlData(urlHashData)
 
   	end
 
   	def self.checkTimeTableUrl()
-  		#urlHashData = UrlHashDbManager.selectWhereUrl('http://www.ait.ac.jp/assets/docs/access_yakusa02.pdf')
-  		urlHashData = UrlHashDbManager.selectWhereUrl('https://blog.ppen.info/wp/?page_id=29')
+  		urlHashData = UrlHashDbManager.selectWhereUrl('http://www.ait.ac.jp/assets/docs/access_yakusa02.pdf')
+  		#urlHashData = UrlHashDbManager.selectWhereUrl('https://blog.ppen.info/wp/?page_id=29')
   		  	
   		self.updateUrlData(urlHashData)
 
