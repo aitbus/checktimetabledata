@@ -3,6 +3,7 @@
 # 
 require 'open-uri'
 require 'digest/sha1'
+require 'pdf/reader'
 
 require 'dotenv'
 
@@ -38,8 +39,8 @@ class CheckHttpDataManager
 
   	def self.checkMainUrl()
   		urlHashData = UrlHashDbManager.selectWhereUrl('http://www.ait.ac.jp/access/yakusa/')
-  		#urlHashData = UrlHashDbManager.selectWhereUrl('https://blog.ppen.info/')
-  		self.updateUrlData(urlHashData)
+  		#urlHashData = UrlHashDbManager.selectWhereUrl('https://blog.ppen.info')
+  		self.updateUrlData(urlHashData,false)
 
   	end
 
@@ -47,7 +48,7 @@ class CheckHttpDataManager
   		urlHashData = UrlHashDbManager.selectWhereUrl('http://www.ait.ac.jp/assets/docs/access_yakusa01.pdf')
   		#urlHashData = UrlHashDbManager.selectWhereUrl('https://blog.ppen.info/wp/?p=298')
   		  	
-  		self.updateUrlData(urlHashData)
+  		self.updateUrlData(urlHashData,true)
 
   	end
 
@@ -55,16 +56,21 @@ class CheckHttpDataManager
   		urlHashData = UrlHashDbManager.selectWhereUrl('http://www.ait.ac.jp/assets/docs/access_yakusa02.pdf')
   		#urlHashData = UrlHashDbManager.selectWhereUrl('https://blog.ppen.info/wp/?page_id=29')
   		  	
-  		self.updateUrlData(urlHashData)
+  		self.updateUrlData(urlHashData,true)
 
   	end
 
 
 
 ###############プライベート
-	def self.updateUrlData(urlHashData = UrlHashData.new())
-		html = open(urlHashData.url).read.encode("utf-8")
-		hash = Digest::SHA1.hexdigest(html);
+	def self.updateUrlData(urlHashData = UrlHashData.new(),isPdf=false)
+		if isPdf == true
+			html = self.pdftext(open(urlHashData.url))
+			hash = Digest::SHA1.hexdigest(html);
+		else
+			html = open(urlHashData.url).read.encode("utf-8",:invalid => :replace,:undef => :replace)
+			hash = Digest::SHA1.hexdigest(html);
+		end
 		#print "url= #{urlHashData.url} hash=#{hash}"
 		if hash != urlHashData.hash
 			#データに違いがあった場合
@@ -78,6 +84,17 @@ class CheckHttpDataManager
 			@alertMsg += "#{urlHashData.url}に違いはないようです。\n"
 		end
 
+	end
+
+	def self.pdftext(io)
+		reader = PDF::Reader.new(io)
+
+		pdf_pages=""
+		reader.pages.each do |page|
+  			pdf_pages += page.text
+		end
+
+		return pdf_pages
 	end
 
 

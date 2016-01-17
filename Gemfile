@@ -27,6 +27,8 @@ gem 'eval'
 
 gem  'dotenv'
 
+gem 'pdf-reader'
+
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
