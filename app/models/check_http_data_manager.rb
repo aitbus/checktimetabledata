@@ -4,6 +4,9 @@
 require 'open-uri'
 require 'digest/sha1'
 
+require 'dotenv'
+
+
 class CheckHttpDataManager
 	@alertMsg = ''
 	@isExitDifferData= false
@@ -13,33 +16,46 @@ class CheckHttpDataManager
   	end
 
   	def self.check()
+  		Dotenv.load! "config/setting/globalconfig.env"
+
   		self.checkMainUrl()#メイン部分のURLのチェック
   		self.checkTimeScheduleUrl()#予定表
   		self.checkTimeTableUrl()#時刻表
 
-  		print "#{@alertMsg}"
+  		if @isExitDifferData == true
+  			SlackManager.sendMessage("#{@alertMsg}","#{ENV['SLACK_NOTICE_CHANNEL']}")#slack通知
+  		
+  		else
+  			#違いがなかった場合の処理
+  			SlackManager.sendMessage("#{@alertMsg}","#{ENV['SLACK_NONOTICE_CHANNEL']}")#slack通知
+  		end
+
+  		#print "#{@alertMsg}"
+
+
   	end
 
 
   	def self.checkMainUrl()
-  		  	urlHashData = UrlHashDbManager.selectWhereUrl('https://blog.ppen.info/')
-  		  	self.updateUrlData(urlHashData)
+  		#urlHashData = UrlHashDbManager.selectWhereUrl('http://www.ait.ac.jp/access/yakusa/')
+  		urlHashData = UrlHashDbManager.selectWhereUrl('https://blog.ppen.info/')
+  		self.updateUrlData(urlHashData)
 
   	end
 
   	def self.checkTimeScheduleUrl()
-  		  	#urlHashData = UrlHashDbManager.selectWhereUrl('http://www.ait.ac.jp/assets/docs/access_yakusa01.pdf')
-  		  	urlHashData = UrlHashDbManager.selectWhereUrl('https://blog.ppen.info/wp/?p=298')
+  		#urlHashData = UrlHashDbManager.selectWhereUrl('http://www.ait.ac.jp/assets/docs/access_yakusa01.pdf')
+  		urlHashData = UrlHashDbManager.selectWhereUrl('https://blog.ppen.info/wp/?p=298')
   		  	
-  		  	self.updateUrlData(urlHashData)
+  		self.updateUrlData(urlHashData)
 
   	end
 
   	def self.checkTimeTableUrl()
-  		  	#urlHashData = UrlHashDbManager.selectWhereUrl('http://www.ait.ac.jp/assets/docs/access_yakusa02.pdf')
-  		  	urlHashData = UrlHashDbManager.selectWhereUrl('https://blog.ppen.info/wp/?page_id=29')
+  		#urlHashData = UrlHashDbManager.selectWhereUrl('http://www.ait.ac.jp/assets/docs/access_yakusa02.pdf')
+  		urlHashData = UrlHashDbManager.selectWhereUrl('https://blog.ppen.info/wp/?page_id=29')
   		  	
-  		  	self.updateUrlData(urlHashData)
+  		self.updateUrlData(urlHashData)
 
   	end
 
